@@ -12,10 +12,15 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newPerson = { id: nextId, name: newName };
-    setPersons([...persons, newPerson]);
-    setNewName("");
-    setNextId(nextId + 1);
+    if (persons.some((person) => person.name === newName)) {
+      alert(`${newName} is already added to the phonebook`);
+      setNewName("");
+    } else {
+      const newPerson = { id: nextId, name: newName };
+      setPersons([...persons, newPerson]);
+      setNewName("");
+      setNextId(nextId + 1);
+    }
   };
 
   return (
