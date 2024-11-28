@@ -8,14 +8,15 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [number, setNumber] = useState("");
   const [newName, setNewName] = useState("");
-  const [nextId, setNextId] = useState(persons.length + 1);
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons")
-    .then(response => {
-      setPersons(response.data)
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
     })
+    .catch((error) => {
+      console.error("Error loading data:", error);
+    });
   }, []);
 
   const handleNameInput = (e) => {
@@ -39,11 +40,17 @@ const App = () => {
       setNewName("");
       setNumber("");
     } else {
-      const newPerson = { id: nextId, name: newName, number: number };
-      setPersons([...persons, newPerson]);
-      setNewName("");
-      setNumber("");
-      setNextId(nextId + 1);
+      const newPerson = { name: newName, number: number };
+      axios
+        .post("http://localhost:3001/persons", newPerson)
+        .then((response) => {
+          setPersons([...persons, response.data]);
+          setNewName("");
+          setNumber("");
+        })
+        .catch((error) => {
+          console.error("Error adding person:", error);
+        });
     }
   };
 
