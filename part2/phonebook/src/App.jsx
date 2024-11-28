@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import personService from "./services/personService";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
@@ -11,12 +11,14 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-    })
-    .catch((error) => {
-      console.error("Error loading data:", error);
-    });
+    personService
+      .getPersons()
+      .then((persons) => {
+        setPersons(persons);
+      })
+      .catch((error) => {
+        console.error("Error loading data:", error);
+      });
   }, []);
 
   const handleNameInput = (e) => {
@@ -41,10 +43,10 @@ const App = () => {
       setNumber("");
     } else {
       const newPerson = { name: newName, number: number };
-      axios
-        .post("http://localhost:3001/persons", newPerson)
-        .then((response) => {
-          setPersons([...persons, response.data]);
+      personService
+        .addPerson(newPerson)
+        .then((addedPerson) => {
+          setPersons([...persons, addedPerson]);
           setNewName("");
           setNumber("");
         })
