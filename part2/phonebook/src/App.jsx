@@ -3,12 +3,14 @@ import personService from "./services/personService";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
+import Notification from "./Notificaction";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [number, setNumber] = useState("");
   const [newName, setNewName] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personService
@@ -53,6 +55,10 @@ const App = () => {
                 person.id !== existingPerson.id ? person : returnedPerson
               )
             );
+            setMessage(`Updated ${updatedPerson.name} number`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
             setNewName("");
             setNumber("");
           });
@@ -63,6 +69,10 @@ const App = () => {
         .addPerson(newPerson)
         .then((addedPerson) => {
           setPersons([...persons, addedPerson]);
+          setMessage(`Added ${addedPerson.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
           setNewName("");
           setNumber("");
         })
@@ -89,6 +99,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filter={filter} handleFilterInput={handleFilterInput} />
       <h3>Add a new</h3>
       <PersonForm
