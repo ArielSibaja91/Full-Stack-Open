@@ -56,6 +56,14 @@ const App = () => {
     }
   };
 
+  const handleDelete = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService.deletePerson(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
+  };
+
   const filteredPersons = filter
     ? persons.filter((person) =>
         person.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
@@ -75,7 +83,7 @@ const App = () => {
         number={number}
       />
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} onDelete={handleDelete} />
     </div>
   );
 };
