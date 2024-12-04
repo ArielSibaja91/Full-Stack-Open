@@ -1,5 +1,30 @@
 import { useState, useEffect } from "react";
 import { getCountry } from "./services/countryService";
+import { getWeather } from "./services/openWeatherApi";
+
+const CountryWeather = ({ country, latitude, longitude }) => {
+  const [temp, setTemp] = useState(0);
+  const [icon, setIcon] = useState("");
+  const [wind, setWind] = useState(0);
+
+  useEffect(() => {
+    getWeather(latitude, longitude).then((response) => {
+      setTemp(response.main.temp - 273.15);
+      setIcon(
+        `https://openweathermap.org/img/wn/${response.weather[0].icon}@4x.png`
+      );
+      setWind(response.wind.speed);
+    });
+  }, []);
+  return (
+    <div>
+      <h2>Weather in {country}</h2>
+      <p>Temperature {temp.toFixed(2)} Celcius</p>
+      <img src={icon} width={200} height={200} />
+      <p>wind {wind} m/s</p>
+    </div>
+  );
+};
 
 const Info = ({ data, show }) => {
   if (show === false) {
@@ -23,6 +48,11 @@ const Info = ({ data, show }) => {
         alt={`flag of ${data.name.common}`}
         width="400"
         height="200"
+      />
+      <CountryWeather
+        country={data.name.common}
+        latitude={data.latlng[0]}
+        longitude={data.latlng[1]}
       />
     </div>
   );
