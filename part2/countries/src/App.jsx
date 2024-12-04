@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { getCountry } from "./services/countryService";
 
-const Info = ({ data }) => {
+const Info = ({ data, show }) => {
+  if (show === false) {
+    return null;
+  }
+
   const filteredKeys = Object.keys(data.languages);
   return (
     <div>
@@ -25,7 +29,18 @@ const Info = ({ data }) => {
 };
 
 const Country = ({ country }) => {
-  return <li>{country.name.common}</li>;
+  const [show, setShow] = useState(false);
+  const toggle = () => {
+    setShow(!show);
+  };
+  return (
+    <div>
+      <li>
+        {country.name.common} <button onClick={toggle}>show</button>
+      </li>
+      <Info data={country} show={show} />
+    </div>
+  );
 };
 
 const CountryList = ({ countries }) => {
@@ -46,7 +61,7 @@ const CountryList = ({ countries }) => {
   } else if (countries.length === 1) {
     return (
       <div>
-        <Info data={countries[0]} />
+        <Info data={countries[0]} show={true} />
       </div>
     );
   }
