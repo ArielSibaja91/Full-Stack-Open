@@ -1,6 +1,10 @@
 const express = require("express");
 const app = express();
 
+const getNewDate = () => {
+    return new Date().toString();
+};
+
 let persons = [
     {
         "id": 1,
@@ -26,6 +30,15 @@ let persons = [
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
+});
+
+app.get('/info', (request, response) => {
+    const peopleInfo = persons.length;
+    const reqTime = getNewDate();
+    const message = `<p>Phonebook has info for ${peopleInfo} people</p>
+    <p>${reqTime}</p>`;
+
+    response.send(message);
 });
 
 const PORT = 3001;
