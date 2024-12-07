@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 const getNewDate = () => {
     return new Date().toString();
 };
@@ -61,6 +63,19 @@ app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id);
     persons = persons.filter(el => el.id !== id);
     response.status(200).json({ message: `Person with ID ${id} was deleted successfully.` });
+});
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body;
+    const newId = Math.floor(Math.random() * 1000000);
+    const newPerson = {
+        id: newId,
+        name: body.name,
+        number: body.number
+    };
+
+    persons = persons.concat(newPerson);
+    response.status(201).json({ message: `New person added: ${newPerson.name}`});
 });
 
 const PORT = 3001;
