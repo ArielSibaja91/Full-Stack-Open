@@ -1,8 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 morgan.token("body", (req) => {
     return req.method === "POST" ? JSON.stringify(req.body) : "";
@@ -96,7 +98,7 @@ app.post('/api/persons', (request, response) => {
     };
 
     persons = persons.concat(newPerson);
-    response.status(201).json({ message: `New person added: ${newPerson.name}` });
+    response.status(201).json(newPerson);
 });
 
 const PORT = 3001;
