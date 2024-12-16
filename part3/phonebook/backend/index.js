@@ -57,16 +57,35 @@ app.get('/api/persons', (request, response) => {
         });
 });
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
+    Person.find({}).then(persons => {
+        const peopleInfo = persons.length;
+        const reqTime = getNewDate();
+        const message = `<p>Phonebook has info for ${peopleInfo} people</p> 
+        <p>${reqTime}</p>`;
+        response.send(message);
+    })
+    .catch(error => next(error));
+    /*
     const peopleInfo = persons.length;
     const reqTime = getNewDate();
     const message = `<p>Phonebook has info for ${peopleInfo} people</p>
     <p>${reqTime}</p>`;
 
     response.send(message);
+    */
 });
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id).then(person => {
+        if(person) {
+            response.json(person);
+        } else {
+            response.status(404).end();
+        };
+    })
+    .catch(error => next(error));
+    /*
     const id = Number(request.params.id);
     const person = persons.find(el => el.id === id);
 
@@ -75,6 +94,7 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).json({ error: 'Person not found' });
     };
+    */
 });
 
 app.delete('/api/persons/:id', (request, response) => {
