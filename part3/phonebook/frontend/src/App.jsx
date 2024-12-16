@@ -100,7 +100,7 @@ const App = () => {
         .catch((error) => {
           console.error("Error adding person:", error);
           setClassType("error");
-          setMessage(`Error adding ${addedPerson.name}`);
+          setMessage(error.response.data.error);
           setTimeout(() => {
             setMessage(null);
           }, 5000);

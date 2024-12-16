@@ -151,9 +151,10 @@ app.post('/api/persons', (request, response) => {
         response.statusCode = 201;
         response.json(savedPerson);
     })
-        .catch(error => {
-            console.log(error.message);
-        });
+    .catch(error => {
+        console.log(error.message);
+        response.status(400).json({ error: error.message });
+    });
 });
 
 app.put(('/api/persons/:id'), (request, response, next) => {
