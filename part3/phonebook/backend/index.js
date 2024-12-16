@@ -78,9 +78,21 @@ app.get('/api/persons/:id', (request, response) => {
 });
 
 app.delete('/api/persons/:id', (request, response) => {
+    Person.findByIdAndDelete(request.params.id).then(person => {
+        if (person) {
+            response.json(person);
+        } else {
+            response.status(404).end();
+        };
+    })
+        .catch(error => {
+            console.log(error.message);
+        });
+    /*
     const id = Number(request.params.id);
     persons = persons.filter(el => el.id !== id);
     response.status(200).json({ message: `Person with ID ${id} was deleted successfully.` });
+    */
 });
 
 app.post('/api/persons', (request, response) => {
