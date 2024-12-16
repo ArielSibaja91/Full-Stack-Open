@@ -1,19 +1,19 @@
-require("dotenv").config();
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
+require('dotenv').config();
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
 const app = express();
-const Person = require("./models/person");
+const Person = require('./models/person');
 
 app.use(express.json());
 app.use(cors());
 app.use(express.static('dist'))
 
-morgan.token("body", (req) => {
-    return req.method === "POST" ? JSON.stringify(req.body) : "";
+morgan.token('body', (req) => {
+    return req.method === 'POST' ? JSON.stringify(req.body) : '';
 });
 
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 const getNewDate = () => {
     return new Date().toString();
@@ -52,9 +52,9 @@ app.get('/api/persons', (request, response) => {
     Person.find({}).then(result => {
         response.json(result);
     })
-    .catch(error => {
-        console.log(error.message);
-    });
+        .catch(error => {
+            console.log(error.message);
+        });
 });
 
 app.get('/info', (request, response) => {
@@ -73,7 +73,7 @@ app.get('/api/persons/:id', (request, response) => {
     if (person) {
         response.json(person);
     } else {
-        response.status(404).json({ error: "Person not found" });
+        response.status(404).json({ error: 'Person not found' });
     };
 });
 
@@ -91,14 +91,14 @@ app.post('/api/persons', (request, response) => {
             error: 'Name or number is missing'
         });
     }
-
+    /*
     const nameExists = persons.some(person => person.name === body.name);
     if (nameExists) {
         return response.status(400).json({
             error: 'Name must be unique'
         });
     }
-
+    
     const newId = Math.floor(Math.random() * 1000000);
     const newPerson = {
         id: newId,
@@ -108,6 +108,20 @@ app.post('/api/persons', (request, response) => {
 
     persons = persons.concat(newPerson);
     response.status(201).json(newPerson);
+    */
+
+    const person = new Person({
+        name: body.name,
+        number: body.number,
+    });
+
+    person.save().then(savedPerson => {
+        response.statusCode = 201;
+        response.json(savedPerson);
+    })
+        .catch(error => {
+            console.log(error.message);
+        });
 });
 
 const PORT = process.env.PORT;
