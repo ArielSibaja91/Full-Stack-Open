@@ -12,7 +12,7 @@ You can use the API with this routes:
 - **POST** `/api/persons` - Creates a new person
 - **DELETE** `/api/persons/:id` - Deletes a person
 
-## Cómo contribuir
-1. Clona el repositorio.
-2. Corre `npm install` para instalar las dependencias.
-3. Usa `npm start` para iniciar el servidor.
+## Boostrap the project
+1. Clon the repo
+2. Run `npm install` to install dependencies.
+3. Run `npm start` to run the server.
