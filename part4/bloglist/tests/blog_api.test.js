@@ -14,6 +14,13 @@ describe('Get the blog list', () => {
         const response = await api.get('/api/blogs');
         assert.strictEqual(response.body.length, testHelper.blogs.length)
     });
+    test('unique identifier is named id', async() => {
+        const response = await api.get('/api/blogs');
+        const result = response.body[0];
+        const keys = Object.keys(result); 
+        assert(keys.includes('id'));
+        assert.strictEqual(keys.includes('_id'), false);
+    });
 });
 
 after(async () => {
