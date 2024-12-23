@@ -21,6 +21,30 @@ describe('Get the blog list', () => {
         assert(keys.includes('id'));
         assert.strictEqual(keys.includes('_id'), false);
     });
+    test('add a new blog post', async () => {
+        const initialResponse = await api.get('/api/blogs');
+        const initialBlogs = initialResponse.body;
+        const newPost = {
+            title: 'New Blog Post',
+            author: 'Alice',
+            url: 'http://newblog.com',
+            likes: 1,
+        };
+        const postResponse = await api
+            .post('/api/blogs')
+            .send(newPost)
+            .expect(201)
+            .expect('Content-Type', /application\/json/);
+        const updatedResponse = await api.get('/api/blogs');
+        const updatedBlogs = updatedResponse.body;
+        assert.strictEqual(updatedBlogs.length, initialBlogs.length + 1);
+        const createdBlog = updatedBlogs.find(blog => blog.id === postResponse.body.id);
+        assert(createdBlog);
+        assert.strictEqual(createdBlog.title, newPost.title);
+        assert.strictEqual(createdBlog.author, newPost.author);
+        assert.strictEqual(createdBlog.url, newPost.url);
+        assert.strictEqual(createdBlog.likes, newPost.likes);
+    });
 });
 
 after(async () => {
