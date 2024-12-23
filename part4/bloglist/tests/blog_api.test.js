@@ -45,6 +45,20 @@ describe('Get the blog list', () => {
         assert.strictEqual(createdBlog.url, newPost.url);
         assert.strictEqual(createdBlog.likes, newPost.likes);
     });
+    test('blog post without likes defaults to 0', async () => {
+        const newPost = {
+            title: 'Blog with 0 likes',
+            author: 'Ariel',
+            url: 'http://example.com',
+        };
+        const postResponse = await api
+            .post('/api/blogs')
+            .send(newPost)
+            .expect(201)
+            .expect('Content-Type', /application\/json/);
+        const createdBlog = postResponse.body;
+        assert.strictEqual(createdBlog.likes, 0);
+    });
 });
 
 after(async () => {
