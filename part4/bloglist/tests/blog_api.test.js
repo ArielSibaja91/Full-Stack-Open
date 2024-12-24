@@ -1,12 +1,18 @@
-const { test, describe, after } = require('node:test');
+const { test, describe, beforeEach, after } = require('node:test');
 const assert = require('node:assert');
 const supertest = require('supertest');
 const testHelper = require('../utils/test_helper');
 const mongoose = require('mongoose');
 const app = require('../app');
 const api = supertest(app);
+const Blog = require('../models/blog');
 
 describe('Get the blog list', () => {
+    beforeEach(async () => {
+        await Blog.deleteMany({});
+        const initialBlogs = testHelper.blogs;
+        await Blog.insertMany(initialBlogs);
+    });
     test('in JSON format', async () => {
         await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/)
     });
@@ -14,10 +20,10 @@ describe('Get the blog list', () => {
         const response = await api.get('/api/blogs');
         assert.strictEqual(response.body.length, testHelper.blogs.length)
     });
-    test('unique identifier is named id', async() => {
+    test('unique identifier is named id', async () => {
         const response = await api.get('/api/blogs');
         const result = response.body[0];
-        const keys = Object.keys(result); 
+        const keys = Object.keys(result);
         assert(keys.includes('id'));
         assert.strictEqual(keys.includes('_id'), false);
     });
@@ -58,6 +64,26 @@ describe('Get the blog list', () => {
             .expect('Content-Type', /application\/json/);
         const createdBlog = postResponse.body;
         assert.strictEqual(createdBlog.likes, 0);
+    });
+    test('verifies if missing title property returns 400', async () => {
+        const BlogWithoutTitle = {
+            author: 'Ariel',
+            url: 'http://example.com',
+        }
+        await api
+            .post('/api/blogs')
+            .send(BlogWithoutTitle)
+            .expect(400)
+    });
+    test("verifies missing url property returns 400", async () => {
+        const BlogWithoutTitle = {
+            title: 'Hello World',
+            author: 'Ariel',
+        };
+        await api
+            .post('/api/blogs')
+            .send(BlogWithoutTitle)
+            .expect(400);
     });
 });
 
