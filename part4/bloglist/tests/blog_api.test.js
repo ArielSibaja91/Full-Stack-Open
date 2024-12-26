@@ -75,7 +75,7 @@ describe('Get the blog list', () => {
             .send(BlogWithoutTitle)
             .expect(400)
     });
-    test("verifies missing url property returns 400", async () => {
+    test('verifies missing url property returns 400', async () => {
         const BlogWithoutTitle = {
             title: 'Hello World',
             author: 'Ariel',
@@ -84,6 +84,17 @@ describe('Get the blog list', () => {
             .post('/api/blogs')
             .send(BlogWithoutTitle)
             .expect(400);
+    });
+    test('delete a blog post', async () => {
+        const initialResponse = await api.get('/api/blogs');
+        const initialBlogs = initialResponse.body;
+        const blogToDelete = initialBlogs[0];
+        await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+        const updatedResponse = await api.get('/api/blogs');
+        const updatedBlogs = updatedResponse.body;
+        assert.strictEqual(updatedBlogs.length, initialBlogs.length - 1);
+        const ids = updatedBlogs.map(blog => blog.id);
+        assert.strictEqual(ids.includes(blogToDelete.id), false);
     });
 });
 
