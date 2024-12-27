@@ -27,4 +27,9 @@ app.delete('/api/blogs/:id', async (request, response) => {
     response.status(204).end();
 });
 
+app.put('/api/blogs/:id', async (request, response) => {
+    await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true });
+    response.status(201).json(request.body)
+});
+
 module.exports = app;

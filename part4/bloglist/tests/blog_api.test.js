@@ -96,6 +96,22 @@ describe('Get the blog list', () => {
         const ids = updatedBlogs.map(blog => blog.id);
         assert.strictEqual(ids.includes(blogToDelete.id), false);
     });
+    test('update a blog post', async () => {
+        const initialResponse = await api.get('/api/blogs');
+        const initialBlogs = initialResponse.body;
+        const blogToUpdate = initialBlogs[0];
+        const updatedBlog = {
+            ...blogToUpdate,
+            likes: blogToUpdate.likes + 1,
+        };
+        const updatedResponse = await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updatedBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/);
+        const returnedBlog = updatedResponse.body;
+        assert.strictEqual(returnedBlog.likes, updatedBlog.likes);
+    });
 });
 
 after(async () => {
