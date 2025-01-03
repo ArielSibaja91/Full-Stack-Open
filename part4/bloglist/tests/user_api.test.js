@@ -9,44 +9,86 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
 describe('when there is initially one user in db', () => {
-    beforeEach(async () => {
-        await User.deleteMany({})
+  beforeEach(async () => {
+    await User.deleteMany({});
 
-        const passwordHash = await bcrypt.hash('secret', 10)
-        const user = new User({
-            username: 'root',
-            name: 'root',
-            passwordHash
-        });
-
-        await user.save();
+    const passwordHash = await bcrypt.hash('secret', 10)
+    const user = new User({
+      username: 'root',
+      name: 'Super User',
+      passwordHash
     });
-});
 
-describe('Adding new users', () => {
+    await user.save();
+  });
+
+  describe('Adding new users', () => {
     test('Creation succedes with a fresh username', async () => {
-        const usersAtStart = await testHelper.usersInDb();
+      const usersAtStart = await testHelper.usersInDb();
 
-        const newUser = {
-            username: 'ariel',
-            name: 'Ariel Sibaja',
-            password: 'password',
-        };
+      const newUser = {
+        username: 'ariel',
+        name: 'Ariel Sibaja',
+        password: 'password',
+      };
 
-        await api
-            .post('/api/users')
-            .send(newUser)
-            .expect(201)
-            .expect('Content-Type', /application\/json/);
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
 
-        const usersAtEnd = await testHelper.usersInDb();
-        assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1);
+      const usersAtEnd = await testHelper.usersInDb();
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1);
 
-        const usernames = usersAtEnd.map(u => u.username);
-        assert(usernames.includes(newUser.username));
+      const usernames = usersAtEnd.map(u => u.username);
+      assert(usernames.includes(newUser.username));
     });
+
+    test('Show an error if the username is not unique', async () => {
+      const newUser = {
+        username: 'root',
+        name: 'root',
+        password: 'password'
+      };
+
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect({ "error": "expected username to be unique" });
+    })
+
+    test('Show an error when password length is less than 3 characters', async () => {
+      const newUser = {
+        name: 'New User',
+        username: 'newuser',
+        password: '12'
+      };
+
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect({ 'error': 'The password length must be at least 3 characters long' });
+    });
+
+    test('Show an error when username length is shorter than 3 characters', async () => {
+      const newUser = {
+        username: 'nu',
+        name: 'New User2',
+        password: 'password'
+      };
+
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect({ "error": "User validation failed: username: Path `username` (`nu`) is shorter than the minimum allowed length (3)." })
+    });
+  });
 });
 
 after(async () => {
-    await mongoose.connection.close()
+  await mongoose.connection.close();
 });
