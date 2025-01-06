@@ -29,16 +29,6 @@ userRouter.post('/', async (request, response) => {
         passwordHash
     });
 
-    try {
-        const newUser = await user.save();
-        response.status(201).json(newUser);
-    } catch (error) {
-        if (error.name === 'MongoServerError' && error.code === 11000) {
-            response.status(400).json({ error: 'expected username to be unique' });
-        } else if (error.name === 'ValidationError') {
-            response.status(400).json({ error: error.message });
-        } else {
-            throw error;
-        };
-    };
+    const newUser = await user.save();
+    response.status(201).json(newUser);
 });
