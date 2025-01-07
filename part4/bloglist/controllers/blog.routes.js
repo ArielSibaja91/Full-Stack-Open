@@ -16,6 +16,10 @@ blogRouter.post('/', async (request, response) => {
         return response.status(400).end();
     };
 
+    if (!request.user) {
+        return response.status(401).json({ error: 'Unauthorized: token missing or invalid' });
+    };
+
     const user = request.user;
 
     const blog = new Blog({
