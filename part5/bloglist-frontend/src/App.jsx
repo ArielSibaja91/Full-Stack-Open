@@ -8,12 +8,12 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState(null);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-  const [likes, setLikes] = useState("");
   const [user, setUser] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [classType, setClassType] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -36,12 +36,18 @@ const App = () => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
       blogService.setToken(user.token);
+      setMessage(`Welcome ${user.username}`);
+      setClassType("success");
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
       setUsername("");
       setPassword("");
     } catch (error) {
-      setErrorMsg("Wrong credentials");
+      setMessage("Wrong username or password");
+      setClassType("error");
       setTimeout(() => {
-        setErrorMsg(null);
+        setMessage(null);
       }, 5000);
     }
   };
@@ -58,13 +64,17 @@ const App = () => {
       author: author,
       url: url,
       user: user.name,
-      likes: likes,
     };
 
     blogService
       .createBlog(newBlog)
       .then((createdBlog) => {
-        setBlogs(blogs.concat(createdBlog));
+        setBlogs(blogs.concat(createdBlog))
+        setMessage(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
+        setClassType("success")
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
   };
 
@@ -72,7 +82,7 @@ const App = () => {
     return (
       <div>
         <h2>Log into the application</h2>
-        <Notification message={errorMsg} />
+        <Notification message={message} classType={classType} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -101,6 +111,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} classType={classType} />
       <p>{user.username} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <div>
