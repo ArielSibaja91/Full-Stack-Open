@@ -10,9 +10,6 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
   const [classType, setClassType] = useState("");
@@ -31,7 +28,7 @@ const App = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
       const user = await loginService.login({
         username,
@@ -61,29 +58,18 @@ const App = () => {
     setUser(null);
   };
 
-  const addNewBlog = (e) => {
-    e.preventDefault();
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url,
-      user: user.name,
-    };
-
-    blogService
-      .createBlog(newBlog)
-      .then((createdBlog) => {
-        setBlogs(blogs.concat(createdBlog))
-        setMessage(`a new blog ${createdBlog.title} by ${createdBlog.author} added`)
-        setClassType("success")
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-        toggableRef.current.toggleVisibility();
-        setTitle("");
-        setAuthor("");
-        setUrl("");
-      });
+  const addNewBlog = (newBlog) => {
+    blogService.createBlog(newBlog).then((createdBlog) => {
+      setBlogs(blogs.concat(createdBlog));
+      setMessage(
+        `a new blog ${createdBlog.title} by ${createdBlog.author} added`
+      );
+      setClassType("success");
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      toggableRef.current.toggleVisibility();
+    });
   };
 
   if (user === null) {
@@ -123,15 +109,7 @@ const App = () => {
       <p>{user.username} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <Toggable buttonLabel="new blog" ref={toggableRef}>
-        <AddBlog
-          handleSubmit={addNewBlog}
-          handleTitle={({ target }) => setTitle(target.value)}
-          handleAuthor={({ target }) => setAuthor(target.value)}
-          handleUrl={({ target }) => setUrl(target.value)}
-          title={title}
-          author={author}
-          url={url}
-        />
+        <AddBlog newBlog={addNewBlog} />
       </Toggable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
