@@ -108,7 +108,7 @@ const App = () => {
       <Notification message={message} classType={classType} />
       <p>{user.username} logged in</p>
       <button onClick={handleLogout}>logout</button>
-      <Toggable buttonLabel="new blog" ref={toggableRef}>
+      <Toggable buttonLabel="create new blog" ref={toggableRef}>
         <AddBlog newBlog={addNewBlog} />
       </Toggable>
       {blogs.map((blog) => (
