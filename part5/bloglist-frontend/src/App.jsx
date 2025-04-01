@@ -13,6 +13,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
   const [classType, setClassType] = useState("");
+  const [update, setUpdate] = useState(false);
   // Added toggable reference to manage the visibility of the new blog form
   const toggableRef = useRef();
 
@@ -24,7 +25,7 @@ const App = () => {
       setUser(user);
       blogService.setToken(user.token);
     }
-  }, []);
+  }, [update]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,6 +73,11 @@ const App = () => {
     });
   };
 
+  const handleLikes = async (id, updatedBlog) => {
+    await blogService.updateBlog(id, updatedBlog);
+    setUpdate(!update);
+  };
+
   if (user === null) {
     return (
       <div>
@@ -112,7 +118,7 @@ const App = () => {
         <AddBlog newBlog={addNewBlog} />
       </Toggable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} addLikes={handleLikes} />
       ))}
     </div>
   );
