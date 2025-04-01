@@ -82,6 +82,11 @@ const App = () => {
     setUpdate(!update);
   };
 
+  const handleDelete = async (id) => {
+    await blogService.deleteBlog(id);
+    setUpdate(!update);
+  };
+
   if (user === null) {
     return (
       <div>
@@ -122,7 +127,7 @@ const App = () => {
         <AddBlog newBlog={addNewBlog} />
       </Toggable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} addLikes={handleLikes} />
+        <Blog key={blog.id} blog={blog} addLikes={handleLikes} removeBlog={handleDelete} />
       ))}
     </div>
   );
