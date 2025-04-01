@@ -13,12 +13,16 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
   const [classType, setClassType] = useState("");
+  // Added an update state to manage the re-rendering of the blog list when a blog is liked
   const [update, setUpdate] = useState(false);
   // Added toggable reference to manage the visibility of the new blog form
   const toggableRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      blogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(blogs);
+    });
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
