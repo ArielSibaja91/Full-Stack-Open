@@ -1,91 +1,91 @@
-import { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import Notification from "./components/Notification";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import Toggable from "./components/Toggable";
-import AddBlog from "./components/AddBlog";
+import { useState, useEffect, useRef } from 'react'
+import Blog from './components/Blog'
+import Notification from './components/Notification'
+import blogService from './services/blogs'
+import loginService from './services/login'
+import Toggable from './components/Toggable'
+import AddBlog from './components/AddBlog'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [classType, setClassType] = useState("");
+  const [blogs, setBlogs] = useState([])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [classType, setClassType] = useState('')
   // Added an update state to manage the re-rendering of the blog list when a blog is liked
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState(false)
   // Added toggable reference to manage the visibility of the new blog form
-  const toggableRef = useRef();
+  const toggableRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogs);
-    });
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+      blogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(blogs)
+    })
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
-  }, [update]);
+  }, [update])
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const user = await loginService.login({
         username,
         password,
-      });
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      setUser(user);
-      blogService.setToken(user.token);
-      setMessage(`Welcome ${user.username}`);
-      setClassType("success");
+      })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      setUser(user)
+      blogService.setToken(user.token)
+      setMessage(`Welcome ${user.username}`)
+      setClassType('success')
       setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      setUsername("");
-      setPassword("");
+        setMessage(null)
+      }, 5000)
+      setUsername('')
+      setPassword('')
     } catch (error) {
-      setMessage("Wrong username or password");
-      setClassType("error");
+      setMessage('Wrong username or password')
+      setClassType('error')
       setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+        setMessage(null)
+      }, 5000)
     }
-  };
+  }
 
   const handleLogout = () => {
-    window.localStorage.clear();
-    setUser(null);
-  };
+    window.localStorage.clear()
+    setUser(null)
+  }
 
   const addNewBlog = (newBlog) => {
     blogService.createBlog(newBlog).then((createdBlog) => {
-      setBlogs(blogs.concat(createdBlog));
+      setBlogs(blogs.concat(createdBlog))
       setMessage(
         `a new blog ${createdBlog.title} by ${createdBlog.author} added`
-      );
-      setClassType("success");
+      )
+      setClassType('success')
       setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      toggableRef.current.toggleVisibility();
-    });
-  };
+        setMessage(null)
+      }, 5000)
+      toggableRef.current.toggleVisibility()
+    })
+  }
 
   const handleLikes = async (id, updatedBlog) => {
-    await blogService.updateBlog(id, updatedBlog);
-    setUpdate(!update);
-  };
+    await blogService.updateBlog(id, updatedBlog)
+    setUpdate(!update)
+  }
 
   const handleDelete = async (id) => {
-    await blogService.deleteBlog(id);
-    setUpdate(!update);
-  };
+    await blogService.deleteBlog(id)
+    setUpdate(!update)
+  }
 
   if (user === null) {
     return (
@@ -114,7 +114,7 @@ const App = () => {
           <button type="submit">login</button>
         </form>
       </div>
-    );
+    )
   }
 
   return (
@@ -127,10 +127,15 @@ const App = () => {
         <AddBlog newBlog={addNewBlog} />
       </Toggable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} addLikes={handleLikes} removeBlog={handleDelete} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          addLikes={handleLikes}
+          removeBlog={handleDelete}
+        />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
