@@ -22,3 +22,22 @@ test('renders content', () => {
     'Component testing is done with react-testing-library'
   )
 })
+
+test('show content when button is clicked', () => {
+  const blog = {
+    title: 'Component testing is done with react-testing-library',
+    author: 'Ariel Sibaja',
+    url: 'https://fullstackopen.com',
+    likes: 5,
+    user: {
+      id: '643f1a0b2c9e3d4f8c5b6a7e',
+    }
+  }
+
+  const { container } = render(<Blog blog={blog} />)
+
+  const div = container.querySelector('.visible')
+
+  expect(div).toHaveTextContent('https://fullstackopen.com')
+  expect(div).toHaveTextContent('5')
+})
