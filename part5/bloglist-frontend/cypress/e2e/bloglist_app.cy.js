@@ -30,4 +30,22 @@ describe('Bloglist app', function() {
       cy.get('.error').contains('Wrong username or password')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('testuser')
+      cy.get('#password').type('testpassword')
+      cy.get('#login-button').click()
+      cy.contains('testuser logged in')
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('Test title')
+      cy.get('#author').type('Test author')
+      cy.get('#url').type('https://fullstackopen.com')
+      cy.get('#create-button').click()
+      cy.contains('Test title Test author')
+    })
+  })
 })
