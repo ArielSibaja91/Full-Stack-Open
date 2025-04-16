@@ -48,4 +48,24 @@ describe('Bloglist app', function() {
       cy.contains('Test title Test author')
     })
   })
+
+  describe('a blog was created', function() {
+    beforeEach(function() {
+      cy.get('#username').type('testuser')
+      cy.get('#password').type('testpassword')
+      cy.get('#login-button').click()
+      cy.contains('create new blog').click()
+      cy.get('#title').type('Test title')
+      cy.get('#author').type('Test author')
+      cy.get('#url').type('https://fullstackopen.com')
+      cy.get('#create-button').click()
+      cy.contains('Test title Test author')
+    })
+
+    it('A blog can be liked', function() {
+      cy.contains('view').click()
+      cy.contains('0').contains('like').click()
+      cy.contains('1')
+    })
+  })
 })
