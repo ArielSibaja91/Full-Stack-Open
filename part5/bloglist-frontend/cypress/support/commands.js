@@ -23,3 +23,26 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('createuser', ({ name, username, password }) => {
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`);
+    cy.request('POST', `${Cypress.env('BACKEND')}/users/`, {
+        name,
+        username,
+        password
+    });
+    cy.visit('');
+});
+
+Cypress.Commands.add('login', ({ username, password }) => {
+    cy.get('#username').type(username)
+    cy.get('#password').type(password)
+    cy.get('#login-button').click()
+});
+
+Cypress.Commands.add('newblog', ({ title, author, url }) => {
+    cy.contains('create new blog').click()
+    cy.get('#title').type(title)
+    cy.get('#author').type(author)
+    cy.get('#url').type(url)
+    cy.get('#create-button').click()
+});
