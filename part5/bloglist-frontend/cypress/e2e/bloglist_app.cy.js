@@ -68,13 +68,31 @@ describe('Bloglist app', function() {
       cy.contains('Test title2 Test author2')
     })
 
-    it.only('only the creator can remove the blog', function() {
+    it('only the creator can remove the blog', function() {
       cy.contains('logout').click()
+      cy.wait(2000)
       cy.login({username: 'testuser', password: 'testpassword'})
       cy.contains('testuser logged in')
 
       cy.contains('view').click()
       cy.get('#remove-button').should('not.exist')
+    })
+
+    it('blog list is ordered by likes', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('Blog with least likes')
+      cy.get('#author').type('Author with least likes')
+      cy.get('#url').type('https://fullstackopen.com')
+      cy.get('#create-button').click()
+
+      cy.contains('Blog with least likes Author with least likes')
+      cy.contains('view').click()
+      cy.contains('0').contains('like').click()
+      cy.contains('1').contains('like').click()
+      cy.contains('2')
+
+      cy.get('.blog').eq(0).should('contain', 'Test title2 Test author2')
+      cy.get('.blog').eq(1).should('contain', 'Blog with least likes Author with least likes')
     })
   })
 })

@@ -35,9 +35,11 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
 
 
 const showButton = blog.user?.id === user?.id ? true : false;
+console.log('showButton', showButton)
+console.log('blog id:', blog.user?.id, 'user id:', user?.id)
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <div style={hideWhenVisible} className='hidden'>
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>view</button>
