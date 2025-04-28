@@ -36,7 +36,11 @@ const anecdoteSlice = createSlice({
       const content = action.payload
       const newAnecdote = asObject(content)
       console.log(JSON.parse(JSON.stringify(state)))
-      state.push(newAnecdote)
+      state.push({
+        content: newAnecdote.content,
+        id: getId(),
+        votes: 0
+      })
     }
   }
 })
