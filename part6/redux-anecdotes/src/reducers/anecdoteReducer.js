@@ -24,7 +24,7 @@ const anecdoteSlice = createSlice({
     },
     setAnecdotes(state, action) {
       return action.payload
-    }
+    },
   }
 })
 
