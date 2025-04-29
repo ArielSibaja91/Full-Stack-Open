@@ -34,6 +34,11 @@
       "id": "96018",
       "content": "Hello world",
       "votes": 0
+    },
+    {
+      "id": "25135",
+      "content": "Hello world 2",
+      "votes": 0
     }
   ]
 }
