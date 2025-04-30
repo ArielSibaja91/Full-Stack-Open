@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 4
+      "votes": 6
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -44,6 +44,11 @@
       "content": "hello world 3",
       "id": "51656",
       "votes": 0
+    },
+    {
+      "content": "Hello world 4",
+      "id": "25826",
+      "votes": 1
     }
   ]
 }
