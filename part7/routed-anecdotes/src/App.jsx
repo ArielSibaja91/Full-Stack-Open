@@ -93,6 +93,13 @@ const CreateNew = (props) => {
         </div>
         <button>create</button>
       </form>
+      <button onClick={() => {
+        content.onReset()
+        author.onReset()
+        info.onReset()
+      }}>
+        reset
+      </button>
     </div>
   )
 
