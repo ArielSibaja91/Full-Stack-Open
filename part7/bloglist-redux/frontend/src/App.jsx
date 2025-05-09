@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Toggable from "./components/Toggable";
 import AddBlog from "./components/AddBlog";
+import { setNotification } from "./reducers/notificationReducer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [classType, setClassType] = useState("");
   // Added an update state to manage the re-rendering of the blog list when a blog is liked
   const [update, setUpdate] = useState(false);
   // Added toggable reference to manage the visibility of the new blog form
@@ -31,6 +31,8 @@ const App = () => {
     }
   }, [update]);
 
+  const dispatch = useDispatch();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -42,19 +44,11 @@ const App = () => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
       blogService.setToken(user.token);
-      setMessage(`Welcome ${user.username}`);
-      setClassType("success");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
       setUsername("");
       setPassword("");
+      dispatch(setNotification(`Welcome ${user.username}`, "success", 5));
     } catch (error) {
-      setMessage("Wrong username or password");
-      setClassType("error");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+      dispatch(setNotification("Wrong username or password", "error", 5));
     }
   };
 
@@ -66,13 +60,11 @@ const App = () => {
   const addNewBlog = (newBlog) => {
     blogService.createBlog(newBlog).then((createdBlog) => {
       setBlogs(blogs.concat(createdBlog));
-      setMessage(
+      dispatch(setNotification(
         `a new blog ${createdBlog.title} by ${createdBlog.author} added`,
-      );
-      setClassType("success");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+        "success",
+        5,
+      ));
       toggableRef.current.toggleVisibility();
     });
   };
@@ -91,7 +83,7 @@ const App = () => {
     return (
       <div>
         <h2>Log into the application</h2>
-        <Notification message={message} classType={classType} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -124,7 +116,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={message} classType={classType} />
+      <Notification />
       <p>{user.username} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <Toggable buttonLabel="create new blog" ref={toggableRef}>
