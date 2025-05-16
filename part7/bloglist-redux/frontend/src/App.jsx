@@ -8,6 +8,8 @@ import Toggable from "./components/Toggable";
 import AddBlog from "./components/AddBlog";
 import BlogList from "./components/BlogList";
 import LoginForm from "./components/LoginForm";
+import UsersList from "./components/UsersList";
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   const authUser = useSelector((state) => state.authUser);
@@ -42,6 +44,10 @@ const App = () => {
         <AddBlog />
       </Toggable>
       <BlogList />
+      
+      <Routes>
+        <Route path="/users" element={<UsersList />} />
+      </Routes>
     </div>
   );
 };

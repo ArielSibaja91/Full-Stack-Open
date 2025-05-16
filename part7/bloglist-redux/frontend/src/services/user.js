@@ -1,8 +1,8 @@
 import axios from "axios";
 const baseUrl = "/api/users";
 
-const getAllUsers = () => {
-  const response = axios.get(baseUrl);
+const getAllUsers = async () => {
+  const response = await axios.get(baseUrl);
   return response.data
 }
 
