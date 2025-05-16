@@ -1,6 +1,13 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addVotes, deleteBlogs } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
-const Blog = ({ blog, addLikes, removeBlog, user }) => {
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch();
+
+  const authUser = useSelector((state) => state.authUser);
+
   const blogStyle = {
     padding: 10,
     paddingLeft: 2,
@@ -18,24 +25,20 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
   };
 
   const addLike = () => {
-    const updatedBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-    };
-    addLikes(blog.id, updatedBlog);
+    dispatch(addVotes(blog));
+    dispatch(setNotification(`you liked ${blog.title}`, "success", 5));
   };
 
   const deleteBlog = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      removeBlog(blog.id);
+      dispatch(deleteBlogs(blog.id));
+      dispatch(setNotification(`you removed ${blog.title}`, "success", 5));
     }
   };
 
-  const showButton = blog.user?.id === user?.id ? true : false;
+  const showButton = blog.user?.id === authUser?.id ? true : false;
   console.log("showButton", showButton);
-  console.log("blog id:", blog.user?.id, "user id:", user?.id);
+  console.log("blog id:", blog.user?.id, "user id:", authUser?.id);
 
   return (
     <div style={blogStyle} className="blog">

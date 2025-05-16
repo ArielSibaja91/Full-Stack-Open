@@ -47,7 +47,7 @@ blogRouter.delete('/:id', async (request, response) => {
 
     if (selectedBlog.user.toString() === user.id.toString()) {
         await Blog.findByIdAndDelete(request.params.id);
-        response.status(204).end();
+        response.status(201).json({ id: request.params.id });
     } else {
         response.status(401).json({ error: 'This user cannot delete this blog' });
     };
@@ -57,15 +57,22 @@ blogRouter.put('/:id', async (request, response) => {
     if (!request.user) {
         return response.status(401).json({ error: 'Invalid Token' });
     };
-    const user = request.user;
-    const selectedBlog = await Blog.findById(request.params.id);
-
-    if (selectedBlog.user.toString() === user.id.toString()) {
-        await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true });
-        response.status(201).json(request.body);
-    } else {
-        response.status(401).json({ error: 'This user cannot modify this blog' });
-    };
+    const { likes } = request.body;
+    try {
+        const updatedBlog = await Blog.findByIdAndUpdate(
+            request.params.id,
+            { likes },
+            { new: true, runValidators: true }
+        ).populate('user', { username: 1, name: 1, id: 1 });
+        if (updatedBlog) {
+            response.json(updatedBlog);
+        } else {
+            response.status(404).json({ error: 'Blog not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        response.status(400).json({ error: 'malformatted id' });
+    }
 });
 
 module.exports = blogRouter;

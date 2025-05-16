@@ -1,33 +1,35 @@
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
-const AddBlog = ({ newBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+const AddBlog = () => {
+  const dispatch = useDispatch();
 
-  const handleTitle = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleAuthor = (e) => {
-    setAuthor(e.target.value);
-  };
-
-  const handleUrl = (e) => {
-    setUrl(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    newBlog({
-      title,
-      author,
-      url,
-    });
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-  };
+
+    const title = e.target.title.value;
+    const author = e.target.author.value;
+    const url = e.target.url.value;
+    e.target.title.value = "";
+    e.target.author.value = "";
+    e.target.url.value = "";
+
+    const createdBlog = {
+      title: title,
+      author: author,
+      url: url,
+    };
+    
+    dispatch(createBlog(createdBlog));
+    dispatch(
+      setNotification(
+        `a new blog ${createdBlog.title} by ${createdBlog.author} added`,
+        "success",
+        5
+      )
+    );
+  }
 
   return (
     <div>
@@ -37,9 +39,7 @@ const AddBlog = ({ newBlog }) => {
           title:
           <input
             type="text"
-            value={title}
             name="Title"
-            onChange={handleTitle}
             placeholder="write the title"
             id="title"
           />
@@ -48,9 +48,7 @@ const AddBlog = ({ newBlog }) => {
           author:
           <input
             type="text"
-            value={author}
             name="Author"
-            onChange={handleAuthor}
             placeholder="write the author"
             id="author"
           />
@@ -59,9 +57,7 @@ const AddBlog = ({ newBlog }) => {
           url:
           <input
             type="url"
-            value={url}
             name="url"
-            onChange={handleUrl}
             placeholder="write the url"
             id="url"
           />
