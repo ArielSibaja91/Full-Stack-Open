@@ -1,9 +1,12 @@
+import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import Toggable from "./Toggable";
 
 const AddBlog = () => {
   const dispatch = useDispatch();
+  const toggableRef = useRef();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +35,7 @@ const AddBlog = () => {
   }
 
   return (
-    <div>
+    <Toggable buttonLabel="create new blog" ref={toggableRef}>
       <h2>create new</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -66,7 +69,7 @@ const AddBlog = () => {
           create
         </button>
       </form>
-    </div>
+    </Toggable>
   );
 };
 
