@@ -10,7 +10,7 @@ import LoginForm from "./components/LoginForm";
 import UsersList from "./components/UsersList";
 import SingleUser from "./components/SingleUser";
 import SingleBlog from "./components/SingleBlog";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 const App = () => {
   const authUser = useSelector((state) => state.authUser);
@@ -25,6 +25,7 @@ const App = () => {
   const Home = () => {
     return (
       <div>
+        <h2>blog app</h2>
         <AddBlog />
         <BlogList />
       </div>
@@ -53,10 +54,15 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <nav className="navbar">
+        <Link to="/">home</Link>
+        <Link to="/blogs">blogs</Link>
+        <Link to="/users">users</Link>
+        <p>{authUser.username} logged in</p>
+        <button type="submit" onClick={handleLogout}>logout</button>
+      </nav>
+
       <Notification />
-      <p>{authUser.username} logged in</p>
-      <button type="submit" onClick={handleLogout}>logout</button>
       
       <Routes>
         <Route path="/" element={<Home />} />
