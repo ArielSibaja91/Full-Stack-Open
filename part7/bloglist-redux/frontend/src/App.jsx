@@ -9,6 +9,7 @@ import BlogList from "./components/BlogList";
 import LoginForm from "./components/LoginForm";
 import UsersList from "./components/UsersList";
 import SingleUser from "./components/SingleUser";
+import SingleBlog from "./components/SingleBlog";
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -24,7 +25,6 @@ const App = () => {
   const Home = () => {
     return (
       <div>
-        <h2>blogs</h2>
         <AddBlog />
         <BlogList />
       </div>
@@ -64,6 +64,7 @@ const App = () => {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<SingleUser />} />
+        <Route path="/blogs/:id" element={<SingleBlog />} />
       </Routes>
     </div>
   );
