@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addVotes, deleteBlogs } from "../reducers/blogReducer";
 import { setNotification } from "../reducers/notificationReducer";
 import { useParams } from "react-router-dom";
+import { initializeComments } from "../reducers/commentReducer";
+import BlogComment from "./BlogComment";
 
 const SingleBlog = () => {
   const dispatch = useDispatch();
@@ -9,6 +12,13 @@ const SingleBlog = () => {
   const authUser = useSelector((state) => state.authUser);
   const id = useParams().id;
   const blog = blogs.find((b) => b.id === String(id));
+
+  useEffect(() => {
+    if (id) {
+      dispatch(initializeComments(id));
+    }
+  }
+  , [dispatch, id]);
 
   if (!blog) {
     return null;
@@ -43,6 +53,7 @@ const SingleBlog = () => {
           remove
         </button>
       )}
+      <BlogComment id={blog.id} />
     </div>
   );
 };
