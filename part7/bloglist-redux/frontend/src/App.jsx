@@ -10,11 +10,17 @@ import LoginForm from "./components/LoginForm";
 import UsersList from "./components/UsersList";
 import SingleUser from "./components/SingleUser";
 import SingleBlog from "./components/SingleBlog";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Container, AppBar, Toolbar, Box, Button, Typography } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const App = () => {
   const authUser = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(initializeUser());
@@ -24,44 +30,65 @@ const App = () => {
 
   const Home = () => {
     return (
-      <div>
-        <h2>blog app</h2>
+      <Box sx={{ marginBottom: 6 }}>
+        <Typography variant="h4" paddingBottom={2}>Welcome to the Blog App</Typography>
         <AddBlog />
         <BlogList />
-      </div>
+      </Box>
     )
   }
 
   const Blogs = () => {
     return (
-      <div>
-        <h2>blogs</h2>
+      <Box sx={{ marginBottom: 6 }}>
+        <Typography variant="h4" paddingBottom={2}>Blogs</Typography>
         <BlogList />
-      </div>
+      </Box>
     )
   }
 
   if(authUser === null) {
     return (
-      <LoginForm />
+      <Container>
+        <LoginForm />
+      </Container>
     )
   }
 
   const handleLogout = async (e) => {
     e.preventDefault();
     dispatch(logout());
+    navigate("/");
   };
 
   return (
-    <div>
-      <nav className="navbar">
-        <Link to="/">home</Link>
-        <Link to="/blogs">blogs</Link>
-        <Link to="/users">users</Link>
-        <p>{authUser.username} logged in</p>
-        <button type="submit" onClick={handleLogout}>logout</button>
-      </nav>
-
+    <Container>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            <HomeIcon sx={{ mr: 0.5 }}  />
+            Home
+          </Button>
+          <Button color="inherit" component={Link} to="/blogs">
+            <EditNoteIcon sx={{ mr: 0.5 }}  />
+            Blogs
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            <PeopleAltIcon sx={{ mr: 0.5 }} />
+            Users
+          </Button>
+          <Button color="inherit" type="submit" onClick={handleLogout}>
+            Logout
+            <LogoutIcon sx={{ ml: 0.5 }} />
+          </Button>
+          <Typography variant="p" sx={{ flexGrow: 1, textAlign: 'end' }}>
+            {authUser.username} logged in!
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      </Box>
+      
       <Notification />
       
       <Routes>
@@ -72,7 +99,7 @@ const App = () => {
         <Route path="/users/:id" element={<SingleUser />} />
         <Route path="/blogs/:id" element={<SingleBlog />} />
       </Routes>
-    </div>
+    </Container>
   );
 };
 

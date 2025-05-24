@@ -1,22 +1,21 @@
 import { Link } from "react-router-dom";
+import { TableRow, TableCell, Link as NavLink, Typography } from "@mui/material";
 
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    padding: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
-
   return (
-    <div style={blogStyle} className="blog">
-      <div className="hidden">
-        <Link to={`/blogs/${blog.id}`}>
-          {blog.title} {blog.author}
-        </Link>
-      </div>
-    </div>
+    <TableRow className="blog">
+      <TableCell className="hidden">
+        <NavLink component={Link} to={`/blogs/${blog.id}`} underline="none" color="dodgerblue">
+          {blog.title}
+        </NavLink>
+      </TableCell>
+      <TableCell>
+        <Typography variant="p">By </Typography>
+        <NavLink component={Link} to={`/users/${blog.user.id}`} underline="none" color="dodgerblue">
+          {blog.author}
+        </NavLink>
+      </TableCell>
+    </TableRow>
   );
 };
 

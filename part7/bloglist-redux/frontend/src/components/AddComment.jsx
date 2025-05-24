@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { createComment } from "../reducers/commentReducer";
 import { setNotification } from "../reducers/notificationReducer";
+import { Input, Button } from "@mui/material";
 
 const AddComment = ({ id }) => {
   const dispatch = useDispatch();
@@ -16,8 +17,8 @@ const AddComment = ({ id }) => {
 
   return (
     <form onSubmit={handleComment}>
-      <input name="comment" />
-      <button type="submit">add comment</button>
+      <Input name="comment" />
+      <Button type="submit">add comment</Button>
     </form>
   );
 }

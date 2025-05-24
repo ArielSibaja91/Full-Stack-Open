@@ -23,23 +23,34 @@ blogRouter.post('/', async (request, response) => {
 
     const user = request.user;
 
-    const comment = await CommentModel.findById(body.commentId);
+    let comment = null;
+    
+    if (body.commentId) {
+        comment = await CommentModel.findById(body.commentId);
+        if (!comment) {
+            return response.status(400).json({ error: 'Invalid commentId provided' });
+        };
+    };
 
     const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes,
+        likes: body.likes || 0,
         user: user.id,
-        comment: comment.id
+        comment: comment ? comment.id : null
     });
 
     const newBlog = await blog.save();
     const populatedBlog = await newBlog.populate('user', { username: 1, name: 1, id: 1 });
     user.blogs = user.blogs.concat(newBlog._id);
     await user.save();
-    comment.blogs = comment.blogs.concat(newBlog._id);
-    await comment.save();
+
+    if (comment) {
+        comment.blogs = comment.blogs.concat(newBlog._id);
+        await comment.save();
+    };
+
     response.status(201).json(populatedBlog);
 });
 

@@ -1,19 +1,20 @@
 import { useSelector } from "react-redux";
 import AddComment from "./AddComment";
+import { List, ListItem, Typography, Box } from "@mui/material";
 
 const BlogComment = ({ id }) => {
   const comments = useSelector((state) => state.comments);
 
   return (
-    <div>
-      <h3>comments</h3>
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h6">Comments</Typography>
       <AddComment id={id} />
-      <ul>
+      <List>
         {comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
+          <ListItem key={comment.id}>{comment.content}</ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   );
 };
 

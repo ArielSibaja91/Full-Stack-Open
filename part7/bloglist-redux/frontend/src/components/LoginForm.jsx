@@ -2,6 +2,16 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/authReducer";
 import { initializeBlogs } from "../reducers/blogReducer";
 import Notification from "./Notification";
+import {
+  Box,
+  Typography,
+  Input,
+  InputLabel,
+  InputAdornment,
+  Button,
+} from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import PasswordIcon from "@mui/icons-material/Password";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -19,22 +29,59 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
-      <h2>Log in to application</h2>
-      <Notification />
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
+    >
+      <Typography variant="h2" paddingBottom={4}>
+        Hi there, Welcome!
+      </Typography>
+      <Typography variant="h5" paddingBottom={2}>
+        Log in to application
+      </Typography>
       <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input name="username" type="text" id="username" />
-        </div>
-        <div>
-          password
-          <input name="password" type="password" id="password" />
-        </div>
-        <button type="submit" id="login-button">login</button>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <InputLabel>Username</InputLabel>
+          <Input
+            name="username"
+            type="text"
+            id="username"
+            startAdornment={
+              <InputAdornment position="start">
+                <AccountCircleIcon />
+              </InputAdornment>
+            }
+          />
+          <InputLabel>Password</InputLabel>
+          <Input
+            name="password"
+            type="password"
+            id="password"
+            startAdornment={
+              <InputAdornment position="start">
+                <PasswordIcon />
+              </InputAdornment>
+            }
+          />
+          <Button variant="outlined" type="submit" id="login-button">
+            login
+          </Button>
+        </Box>
       </form>
-    </div>
+      <Notification />
+    </Box>
   );
-}
+};
 
 export default LoginForm;
