@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 const blogRouter = require('./controllers/blog.routes');
 const userRouter = require('./controllers/user.routes');
 const loginRouter = require('./controllers/login.routes');
@@ -16,6 +17,9 @@ app.use('/api/blogs', blogRouter);
 app.use('/api/blogs', commentsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
+app.get('*', (request, response) => {
+  response.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 app.use(middleware.errorHandler);
 
 if (process.env.NODE_ENV === 'test') {
