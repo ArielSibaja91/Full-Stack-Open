@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { setNotification } from "./notificationReducer";
+import { initializeAllUsers } from "./userReducer";
 import loginService from "../services/login";
+import userService from "../services/user";
 import blogService from "../services/blogs";
 
 const authSlice = createSlice({
@@ -56,6 +58,25 @@ export const logout = () => {
         window.localStorage.clear();
         dispatch(logOutUser());
         dispatch(setNotification("Successfully logged out", "success", 5));
+    }
+}
+
+export const registerUser = (username, name, password) => {
+    return async (dispatch) => {
+        try {
+            const user = await userService.registerUser({
+                username,
+                name,
+                password,
+            });
+            window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
+            dispatch(loginUser(user));
+            blogService.setToken(user.token);
+            dispatch(setNotification(`User ${user.username} successfully registered`, "success", 5));
+            dispatch(initializeAllUsers());
+        } catch (error) {
+            dispatch(setNotification("Error registering user", "error", 5));
+        }
     }
 }
 

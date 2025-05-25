@@ -7,6 +7,7 @@ import Notification from "./components/Notification";
 import AddBlog from "./components/AddBlog";
 import BlogList from "./components/BlogList";
 import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import UsersList from "./components/UsersList";
 import SingleUser from "./components/SingleUser";
 import SingleBlog from "./components/SingleBlog";
@@ -32,7 +33,7 @@ const App = () => {
     return (
       <Box sx={{ marginBottom: 6 }}>
         <Typography variant="h4" paddingBottom={2}>Welcome to the Blog App</Typography>
-        <AddBlog />
+        {authUser && <AddBlog />}
         <BlogList />
       </Box>
     )
@@ -47,18 +48,22 @@ const App = () => {
     )
   }
 
-  if(authUser === null) {
+  if (authUser === null) {
     return (
       <Container>
-        <LoginForm />
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="*" element={<LoginForm />} />
+        </Routes>
       </Container>
-    )
+    );
   }
 
   const handleLogout = async (e) => {
     e.preventDefault();
     dispatch(logout());
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -94,6 +99,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="login" element={authUser ? <Home /> : <LoginForm />} />
+        <Route path="register" element={authUser ? <Home /> : <RegisterForm />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<SingleUser />} />

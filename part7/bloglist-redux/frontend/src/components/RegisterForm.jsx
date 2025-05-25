@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
-import { login } from "../reducers/authReducer";
+import { registerUser } from "../reducers/authReducer";
 import { Link } from "react-router-dom";
-import Notification from "./Notification";
 import {
   Box,
   Typography,
@@ -9,23 +8,26 @@ import {
   InputLabel,
   InputAdornment,
   Button,
-  Link as NavLink
+  Link as NavLink,
 } from "@mui/material";
+import Notification from "./Notification";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PasswordIcon from "@mui/icons-material/Password";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const dispatch = useDispatch();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     const username = e.target.username.value;
+    const name = e.target.name.value;
     const password = e.target.password.value;
     e.target.username.value = "";
+    e.target.name.value = "";
     e.target.password.value = "";
 
-    dispatch(login(username, password));
+    dispatch(registerUser(username, name, password));
   };
 
   return (
@@ -42,9 +44,9 @@ const LoginForm = () => {
         Hi there, Welcome!
       </Typography>
       <Typography variant="h5" paddingBottom={2}>
-        Log into the application
+        Register into the application
       </Typography>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleRegister}>
         <Box
           sx={{
             display: "flex",
@@ -63,6 +65,17 @@ const LoginForm = () => {
               </InputAdornment>
             }
           />
+          <InputLabel>Name</InputLabel>
+          <Input
+            name="name"
+            type="text"
+            id="name"
+            startAdornment={
+              <InputAdornment position="start">
+                <AccountCircleIcon />
+              </InputAdornment>
+            }
+          />
           <InputLabel>Password</InputLabel>
           <Input
             name="password"
@@ -74,16 +87,17 @@ const LoginForm = () => {
               </InputAdornment>
             }
           />
-          <Button variant="outlined" type="submit" id="login-button">
-            login
+          <Button variant="outlined" type="submit" id="register-button">
+            register
           </Button>
           <Typography variant="body2" paddingTop={2}>
-            If you don't have an account, please register{" "}
+            If you have an account, please login{" "}
             <NavLink
               component={Link}
-              to="/register"
+              to="/login"
               underline="none"
-              color="dodgerblue">
+              color="dodgerblue"
+            >
               here
             </NavLink>
           </Typography>
@@ -94,4 +108,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
