@@ -57,6 +57,7 @@ const LoginForm = () => {
             name="username"
             type="text"
             id="username"
+            required
             startAdornment={
               <InputAdornment position="start">
                 <AccountCircleIcon />
@@ -68,6 +69,7 @@ const LoginForm = () => {
             name="password"
             type="password"
             id="password"
+            required
             startAdornment={
               <InputAdornment position="start">
                 <PasswordIcon />

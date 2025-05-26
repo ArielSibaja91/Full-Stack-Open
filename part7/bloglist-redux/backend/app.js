@@ -10,7 +10,7 @@ const commentsRouter = require('./controllers/comment.routes');
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('dist'))
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 app.use(middleware.tokenExtractor);
 app.use(middleware.userExtractor);
 app.use('/api/blogs', blogRouter);
@@ -18,7 +18,7 @@ app.use('/api/blogs', commentsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
 app.get('*', (request, response) => {
-  response.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  response.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
 });
 app.use(middleware.errorHandler);
 

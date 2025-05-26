@@ -59,6 +59,7 @@ const RegisterForm = () => {
             name="username"
             type="text"
             id="username"
+            required
             startAdornment={
               <InputAdornment position="start">
                 <AccountCircleIcon />
@@ -70,6 +71,7 @@ const RegisterForm = () => {
             name="name"
             type="text"
             id="name"
+            required
             startAdornment={
               <InputAdornment position="start">
                 <AccountCircleIcon />
@@ -81,6 +83,7 @@ const RegisterForm = () => {
             name="password"
             type="password"
             id="password"
+            required
             startAdornment={
               <InputAdornment position="start">
                 <PasswordIcon />
