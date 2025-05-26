@@ -28,7 +28,7 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-  Link as NavLink
+  Link as NavLink,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import EditNoteIcon from "@mui/icons-material/EditNote";
@@ -102,7 +102,7 @@ const App = () => {
     setOpen(open);
   };
 
-    const menuItems = [
+  const menuItems = [
     { text: "Home", icon: <HomeIcon />, path: "/" },
     { text: "Blogs", icon: <EditNoteIcon />, path: "/blogs" },
     { text: "Users", icon: <PeopleAltIcon />, path: "/users" },
@@ -123,7 +123,7 @@ const App = () => {
               <MenuIcon />
             </IconButton>
           ) : (
-            <Box sx={{ display: 'flex', flexGrow: 1 }}>
+            <Box sx={{ display: "flex", flexGrow: 1 }}>
               <Button color="inherit" component={Link} to="/">
                 <HomeIcon sx={{ mr: 0.5 }} />
                 Home
@@ -136,18 +136,25 @@ const App = () => {
                 <PeopleAltIcon sx={{ mr: 0.5 }} />
                 Users
               </Button>
+              <Button color="inherit" type="submit" onClick={handleLogout}>
+                Logout
+                <LogoutIcon sx={{ ml: 0.5 }} />
+              </Button>
             </Box>
           )}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button color="inherit" type="submit" onClick={handleLogout}>
-              Logout
-              <LogoutIcon sx={{ ml: 0.5 }} />
-            </Button>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <NavLink
               component={Link}
               to={`/users/${authUser.id}`}
               underline="none"
-              sx={{ display: 'flex', alignItems: 'center', color: 'inherit', ml: 1, textTransform: 'uppercase', fontSize: '15px' }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                color: "inherit",
+                ml: 1,
+                textTransform: "uppercase",
+                fontSize: "15px",
+              }}
             >
               {authUser.name}
               <AccountCircleIcon sx={{ ml: 1 }} />
@@ -172,6 +179,20 @@ const App = () => {
                 </ListItemButton>
               </ListItem>
             ))}
+            <ListItem disablePadding>
+              <ListItemButton component={Button} type="submit" onClick={handleLogout}>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Logout"
+                  sx={{
+                    textTransform: "lowercase",
+                    textTransform: "capitalize",
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Box>
       </Drawer>

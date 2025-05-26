@@ -40,10 +40,10 @@ const RegisterForm = () => {
         height: "100vh",
       }}
     >
-      <Typography variant="h2" paddingBottom={4}>
+      <Typography variant="h2" my={4} sx={{ textAlign: "center" }}>
         Hi there, Welcome!
       </Typography>
-      <Typography variant="h5" paddingBottom={2}>
+      <Typography variant="h5" mb={4}>
         Register into the application
       </Typography>
       <form onSubmit={handleRegister}>
