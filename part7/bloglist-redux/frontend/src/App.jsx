@@ -187,7 +187,6 @@ const App = () => {
                 <ListItemText
                   primary="Logout"
                   sx={{
-                    textTransform: "lowercase",
                     textTransform: "capitalize",
                   }}
                 />
