@@ -1,7 +1,7 @@
 # Full-Stack-Open
 Personal repository for the Full Stack Open course.
 
-## Bloglist in Redux
+## Redux-Bloglist
 The final project of part 7 of the basic course is a list of blogs to be developed with React Query or Redux, for consistency it was decided to use Redux. The goal was to unite the backend developed previously in part 4 with a complete frontend (styles, routing and state management).
 
 ## Technologies Used
@@ -15,7 +15,7 @@ For the backend, `NodeJS` with `Express` was used to develop a `RESTful API` tha
 ### Frontend:
 [![My Skills](https://skillicons.dev/icons?i=react,redux,mui,vite&theme=light)](https://skillicons.dev)
 <br>
-For the frontend, `Vite` is used to create a `React` project and manage the development environment. `Redux Toolkit` is used for state management, `Axios` for making HTTP requests to the backend. `Material UI` was used for styles and responsiveness.
+For the frontend, `Vite` is used to create a `React` project and manage the development environment. For routing the app is using `React-Router-Dom`. `Redux Toolkit` is used for state management, `Axios` for making HTTP requests to the backend. `Material UI` was used for styles and responsiveness.
 
 ### Features
 
